@@ -16,7 +16,7 @@ The most common use case for nukecontexts is automated rendering of multiple sta
     with ctx.set_attr(render_node, 'file_type', 'png'):
         nuke.execute(render_node.name(), 1, 1, 1)
 
-The power of nukecontexts comes with composable contexts, using ``multiple_contexts()``. Arbitrarily complex states of the compositing script can be defined and used to automatically generate different result.
+The power of nukecontexts comes with composable contexts, using ``multiple_contexts()``. Arbitrarily complex, varying states of the compositing script can be defined and used to automatically generate different results.
 
 .. code:: python
 
@@ -30,10 +30,14 @@ The power of nukecontexts comes with composable contexts, using ``multiple_conte
     ctx4 = ctx.disable(merge_node)
 
     with ctx.multiple_contexts([ctx1, ctx2, ctx3]):
-        # Render with the merge_node and grade_node enabled, the grade_node's gain attribute set to 2.0 and the switch_node's switch position set to 0.
+        """Render with the merge_node and grade_node enabled, the
+        grade_node's  gain attribute set to 2.0 and the switch_node's switch
+        position set to 0."""
         nuke.execute(render_node.name(), 1, 1, 1)
 
     with ctx.multiple_contexts([ctx3, ctx4]):
-        # Render with the switch_node's switch position set to 0 and the merge node disabled; the grade_node's gain value remains at the original value.
+        """Render with the switch_node's switch position set to 0 and the
+        merge node disabled; the grade_node's gain value remains at the
+        original value."""
         nuke.execute(render_node.name(), 1, 1, 1)
 
