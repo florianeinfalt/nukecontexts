@@ -2,6 +2,12 @@ import sys
 from contextlib import contextmanager
 
 
+class NukeContextError(ValueError):
+    def __init__(self, message, *args):
+        self.message = message
+        super(NukeContextError, self).__init__(message, *args)
+
+
 @contextmanager
 def enabled(nodes, verbose=False):
     """
