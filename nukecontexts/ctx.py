@@ -19,21 +19,8 @@ def enabled(nodes, verbose=False):
     :param verbose: Print attribute changes to stdout
     :type verbose: bool
     """
-    if not isinstance(nodes, list):
-        nodes = [nodes]
-    enter_values = {}
-    for node in nodes:
-        enter_values[node] = node['disable'].value()
-        if verbose:
-            print 'Enabling node: {0}'.format(node.name())
-        node['disable'].setValue(False)
-    try:
+    with set_attr(nodes, 'disable', False, verbose=verbose):
         yield
-    finally:
-        for node, enter_value in enter_values.iteritems():
-            if verbose:
-                print 'Restoring node: {0}'.format(node.name())
-            node['disable'].setValue(enter_value)
 
 
 @contextmanager
@@ -47,21 +34,50 @@ def disabled(nodes, verbose=False):
     :param verbose: Print attribute changes to stdout
     :type verbose: bool
     """
+    with set_attr(nodes, 'disable', True, verbose=verbose):
+        yield
+
+
+@contextmanager
+def set_attr(nodes, attr, value, verbose=False):
+    """
+    Given a list of nodes (:class:`~nuke.Node`), set a given ``attr`` to
+    ``value`` entry and restore to original value on exit.
+
+    :param nodes: Nodes
+    :type nodes: list
+    :param attr: Attribute
+    :type attr: str
+    :param value: Value
+    :type value: str, int, float, bool
+    :param verbose: Print attribute changes to stdout
+    :type verbose: bool
+    """
     if not isinstance(nodes, list):
         nodes = [nodes]
     enter_values = {}
     for node in nodes:
-        enter_values[node] = node['disable'].value()
+        try:
+            assert node
+        except AssertionError:
+            raise NukeContextError('Invalid node')
+        try:
+            enter_values[node] = node[attr].value()
+        except NameError as err:
+            raise NukeContextError('Node \'{0}\': {1}'.format(node.name(), err.args[0]))
         if verbose:
-            print 'Disabling node: {0}'.format(node.name())
-        node['disable'].setValue(True)
+            print 'Setting attribute \'{0}\' on node \'{1}\' to value \'{2}\''.format(attr, node.name(), value)
+        try:
+            node[attr].setValue(value)
+        except TypeError as err:
+            raise NukeContextError('Attribute \'{0}\': {1}'.format(attr, err.args[0]))
     try:
         yield
     finally:
         for node, enter_value in enter_values.iteritems():
             if verbose:
-                print 'Restoring node: {0}'.format(node.name())
-            node['disable'].setValue(enter_value)
+                print 'Restoring attribute \'{0}\' on node \'{1}\' to value \'{2}\''.format(attr, node.name(), enter_value)
+            node[attr].setValue(enter_value)
 
 
 @contextmanager

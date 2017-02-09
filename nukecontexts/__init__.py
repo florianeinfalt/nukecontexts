@@ -16,4 +16,4 @@ if not match:
 __version__ = '0.1'
 __all__ = ['ctx']
 
-from ctx import enabled, disabled, set_attr_to, multiple_contexts
+from ctx import enabled, disabled, set_attr, multiple_contexts
