@@ -10,7 +10,7 @@ The most common use case for nukecontexts is automated rendering of multiple sta
     import nuke
     from nukecontexts import ctx
 
-    render_node = nuke.toNode('render_node')
+    render_node = nuke.toNode('Write1')
     with ctx.set_attr(render_node, 'file_type', 'jpeg'):
         nuke.execute(render_node.name(), 1, 1, 1)
     with ctx.set_attr(render_node, 'file_type', 'png'):
