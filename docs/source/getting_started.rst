@@ -25,13 +25,13 @@ The power of nukecontexts comes with composable contexts, using ``multiple_conte
     switch_node = nuke.toNode('Switch1')
 
     ctx1 = ctx.enable([merge_node, grade_node])
-    ctx2 = ctx.set_attr(grade_node, 'gain', 2.0)
+    ctx2 = ctx.set_attr(grade_node, 'white', 2.0)
     ctx3 = ctx.set_attr(switch_node, 'which', 0)
     ctx4 = ctx.disable(merge_node)
 
     with ctx.multiple_contexts([ctx1, ctx2, ctx3]):
         """Render with the merge_node and grade_node enabled, the
-        grade_node's  gain attribute set to 2.0 and the switch_node's switch
+        grade_node's white attribute set to 2.0 and the switch_node's switch
         position set to 0."""
         nuke.execute(render_node.name(), 1, 1, 1)
 
