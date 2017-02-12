@@ -1,6 +1,9 @@
 nukecontexts
 ============
 
+.. image:: https://readthedocs.org/projects/nukecontexts/badge/?version=latest
+    :target: https://readthedocs.org/projects/nukecontexts/?badge=latest
+
 nukecontexts is a library of composable context managers for Nuke to manage the state of complex compositing scripts in code.
 
 `Full Documentation`_
