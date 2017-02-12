@@ -1,6 +1,8 @@
 nukecontexts
 ============
 
+`Full Documentation`_
+
 nukecontexts is a library of composable context managers for Nuke to manage the state of complex compositing scripts in code.
 
 The most common use case for nukecontexts is automated rendering of multiple states of a compositing script. For example two different output formats, jpg and png.
@@ -41,3 +43,4 @@ The power of nukecontexts comes with composable contexts, using ``multiple_conte
         original value."""
         nuke.execute(render_node.name(), 1, 1, 1)
 
+.. _Full Documentation: http://nukecontexts.readthedocs.io/en/latest/
