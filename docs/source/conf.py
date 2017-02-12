@@ -20,7 +20,7 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 import os
-os.environ['DOCS_CONTEXT'] = True
+os.environ['DOCS_CONTEXT'] = '1'
 
 # -- General configuration ------------------------------------------------
 
