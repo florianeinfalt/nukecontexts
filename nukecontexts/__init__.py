@@ -17,7 +17,7 @@ except:
     if not match:
         raise RuntimeError('Import nukecontexts from within Nuke')
 
-__version__ = '0.1'
+__version__ = '0.1.1'
 __all__ = ['ctx']
 
 from ctx import enabled, disabled, set_attr, multiple_contexts

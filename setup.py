@@ -5,7 +5,7 @@ with open('README.rst', 'r') as f:
 
 setup(
     name = 'nukecontexts',
-    version = '0.1',
+    version = '0.1.1',
     description='Library of composable context managers for Nuke',
     long_description=readme,
     url='https://github.com/florianeinfalt/nukecontexts',
