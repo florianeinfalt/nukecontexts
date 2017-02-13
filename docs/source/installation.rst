@@ -1,7 +1,7 @@
 Installation
 ------------
 
-To install ``nukecontexts`` type:
+To install ``nukecontexts``, type:
 
 .. code-block:: bash
 
@@ -11,3 +11,5 @@ To install ``nukecontexts`` type:
 Open Nuke's ``init.py`` file and add: ::
 
     nuke.pluginAddPath('/path/to/your/local/python/site-packages')
+
+Done.
