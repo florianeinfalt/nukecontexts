@@ -4,11 +4,21 @@ nukecontexts
 .. image:: https://readthedocs.org/projects/nukecontexts/badge/?version=latest
     :target: https://readthedocs.org/projects/nukecontexts/?badge=latest
 
-nukecontexts is a library of composable context managers for Nuke to manage the state of complex compositing scripts in code.
+``nukecontexts`` is a library of composable context managers for Nuke to manage the state of complex compositing scripts in code.
 
 `Full Documentation`_
 
-The most common use case for nukecontexts is automated rendering of multiple states of a compositing script. For example two different output formats, jpg and png.
+Installation
+------------
+
+.. code-block:: bash
+
+    $ pip install nukecontexts
+
+Getting Started
+---------------
+
+The most common use case for ``nukecontexts`` is automated rendering of multiple states of a compositing script. For example two different output formats, jpg and png.
 
 .. code:: python
 
@@ -21,7 +31,7 @@ The most common use case for nukecontexts is automated rendering of multiple sta
     with ctx.set_attr(render_node, 'file_type', 'png'):
         nuke.execute(render_node.name(), 1, 1, 1)
 
-The power of nukecontexts comes with composable contexts, using ``multiple_contexts()``. Arbitrarily complex, varying states of the compositing script can be defined and used to automatically generate different results.
+The power of ``nukecontexts`` comes with composable contexts, using ``multiple_contexts()``. Arbitrarily complex, varying states of the compositing script can be defined and used to automatically generate different results.
 
 .. code:: python
 
