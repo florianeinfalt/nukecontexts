@@ -13,6 +13,7 @@ Contents:
 
    installation
    getting_started
+   advanced_use
    api_documentation
 
 
