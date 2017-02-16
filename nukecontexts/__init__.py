@@ -4,7 +4,7 @@ import sys
 import platform
 
 try:
-    os.environ['DOCS_CONTEXT']
+    os.environ['NON_PRODUCTION_CONTEXT']
 except:
     if platform.system() == 'Darwin':
         application = r'Nuke\d+\.\d+v\d+.app'
