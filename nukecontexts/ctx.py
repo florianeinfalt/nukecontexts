@@ -1,5 +1,6 @@
 import sys
 from contextlib import contextmanager
+from nukecontexts import logger
 
 
 class NukeContextError(ValueError):
@@ -9,37 +10,37 @@ class NukeContextError(ValueError):
 
 
 @contextmanager
-def enabled(nodes, verbose=False):
+def enabled(nodes, log=logger):
     """
     Given a list of nodes (:class:`~nuke.Node`), enable on entry and restore
     to original value on exit.
 
     :param nodes: Nodes
     :type nodes: list
-    :param verbose: Print attribute changes to stdout
-    :type verbose: bool
+    :param log: Logger
+    :type log: logging.Logger
     """
-    with set_attr(nodes, 'disable', False, verbose=verbose):
+    with set_attr(nodes, 'disable', False, log=log):
         yield
 
 
 @contextmanager
-def disabled(nodes, verbose=False):
+def disabled(nodes, log=logger):
     """
     Given a list of nodes (:class:`~nuke.Node`), disable on entry and restore
     to original value on exit.
 
     :param nodes: Nodes
     :type nodes: list
-    :param verbose: Print attribute changes to stdout
-    :type verbose: bool
+    :param log: Logger
+    :type log: logging.Logger
     """
-    with set_attr(nodes, 'disable', True, verbose=verbose):
+    with set_attr(nodes, 'disable', True, log=log):
         yield
 
 
 @contextmanager
-def set_attr(nodes, attr, value, verbose=False):
+def set_attr(nodes, attr, value, log=logger):
     """
     Given a list of nodes (:class:`~nuke.Node`), set a given ``attr`` to
     ``value`` entry and restore to original value on exit.
@@ -50,8 +51,8 @@ def set_attr(nodes, attr, value, verbose=False):
     :type attr: str
     :param value: Value
     :type value: str, int, float, bool
-    :param verbose: Print attribute changes to stdout
-    :type verbose: bool
+    :param log: Logger
+    :type log: logging.Logger
     """
     if not isinstance(nodes, list):
         nodes = [nodes]
@@ -64,9 +65,11 @@ def set_attr(nodes, attr, value, verbose=False):
         try:
             enter_values[node] = node[attr].value()
         except NameError as err:
-            raise NukeContextError('Node \'{0}\': {1}'.format(node.name(), err.args[0]))
-        if verbose:
-            print 'Setting attribute \'{0}\' on node \'{1}\' to value \'{2}\''.format(attr, node.name(), value)
+            raise NukeContextError('Node \'{0}\': {1}'.format(node.name(),
+                                                              err.args[0]))
+        logger.info('Entering context: ({0}/{1}/{2})'.format(node.name(),
+                                                             attr,
+                                                             value))
         try:
             node[attr].setValue(value)
         except TypeError as err:
@@ -75,8 +78,9 @@ def set_attr(nodes, attr, value, verbose=False):
         yield
     finally:
         for node, enter_value in enter_values.iteritems():
-            if verbose:
-                print 'Restoring attribute \'{0}\' on node \'{1}\' to value \'{2}\''.format(attr, node.name(), enter_value)
+            logger.info('Restoring context: ({0}/{1}/{2})'.format(node.name(),
+                                                                  attr,
+                                                                  enter_value))
             node[attr].setValue(enter_value)
 
 
