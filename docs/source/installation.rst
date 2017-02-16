@@ -7,9 +7,8 @@ To install ``nukecontexts``, type:
 
     $ pip install nukecontexts
 
+Open Nuke's ``init.py`` file and add:
 
-Open Nuke's ``init.py`` file and add: ::
+.. code-block:: python
 
     nuke.pluginAddPath('/path/to/your/local/python/site-packages')
-
-Done.
