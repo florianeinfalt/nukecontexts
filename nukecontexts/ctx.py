@@ -1,6 +1,7 @@
 import sys
 from contextlib import contextmanager
 from nukecontexts import logger
+from nukecontexts import sentry
 
 
 class NukeContextError(ValueError):

@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import getpass
 import logging
 import platform
 
@@ -37,3 +38,24 @@ def create_logger():
 
 
 logger = create_logger()
+
+
+def get_sentry():
+    import nuke
+    try:
+        from raven import Client
+        try:
+            os.environ['SENTRY_DSN']
+        except KeyError:
+            raise ImportError
+        client = Client(release=__version__)
+        client.user_context({'username': getpass.getuser()})
+        client.tags_context({
+                'os_version': platform.platform(),
+                'nuke_version': nuke.NUKE_VERSION_STRING})
+        return client
+    except ImportError:
+        return None
+
+
+sentry = get_sentry()
