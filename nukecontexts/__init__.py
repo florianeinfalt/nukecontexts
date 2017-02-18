@@ -8,7 +8,7 @@ import platform
 TESTING = False
 try:
     TESTING = os.environ['NON_PRODUCTION_CONTEXT']
-    logger = None
+    logger = logging.getLogger()
     sentry = None
 except:
     if platform.system() == 'Darwin':
