@@ -3,6 +3,10 @@ from setuptools import setup, find_packages
 with open('README.rst', 'r') as f:
     readme = f.read()
 
+requirements = ['tqdm']
+test_requirements = ['pytest', 'pytest-cov',
+                     'sphinx', 'sphinx_rtd_theme']
+
 setup(
     name = 'nukecontexts',
     version = '0.1.2',
@@ -25,5 +29,7 @@ setup(
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: Implementation :: CPython',
-    ]
+    ],
+    install_requires=requirements,
+    tests_require=test_requirements
 )

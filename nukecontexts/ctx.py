@@ -1,5 +1,8 @@
 import sys
 from contextlib import contextmanager
+
+from tqdm import tqdm
+
 from nukecontexts import logger
 from nukecontexts import sentry
 
@@ -8,6 +11,42 @@ class NukeContextError(ValueError):
     def __init__(self, message, *args):
         self.message = message
         super(NukeContextError, self).__init__(message, *args)
+
+
+class Progress(object):
+    """
+    Convenience wrapper class around :func:`tqdm.tqdm` for easy progress bars
+
+    Usage:
+
+    >>> with Progress(iterable) as progress:
+    >>>    for item in progress:
+    >>>        #do something
+    """
+    def __init__(self, iterable, name='nukecontexts', output=sys.stdout):
+        """
+        :param interable: Iterable to generate progress bar for
+        :type interable: iter
+        :param name: Progress bar label (default: 'nukecontexts')
+        :type name: str
+        :param output: Output stream (default: ``sys.stdout``)
+        :type output: io.TextIOWrapper or io.StringIO
+        """
+        self.name = name
+        self.iterable = iterable
+        self.output = output
+
+    def __enter__(self):
+        """
+        :return: Progress bar
+        :rtype: tqdm.tqdm
+        """
+        return tqdm(iterable=self.iterable,
+                    desc=self.name,
+                    file=self.output)
+
+    def __exit__(self, type, value, traceback):
+        pass
 
 
 @contextmanager
