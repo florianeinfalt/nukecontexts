@@ -9,7 +9,7 @@ test_requirements = ['pytest', 'pytest-cov',
 
 setup(
     name = 'nukecontexts',
-    version = '0.1.2',
+    version = '0.1.3',
     description='A library of composable context managers for Nuke',
     long_description=readme,
     url='https://github.com/florianeinfalt/nukecontexts',
