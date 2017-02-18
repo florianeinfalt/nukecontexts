@@ -5,8 +5,11 @@ import getpass
 import logging
 import platform
 
+TESTING = False
 try:
-    os.environ['NON_PRODUCTION_CONTEXT']
+    TESTING = os.environ['NON_PRODUCTION_CONTEXT']
+    logger = None
+    sentry = None
 except:
     if platform.system() == 'Darwin':
         application = r'Nuke\d+\.\d+v\d+.app'
@@ -37,9 +40,6 @@ def create_logger():
     return logger
 
 
-logger = create_logger()
-
-
 def get_sentry():
     import nuke
     try:
@@ -58,4 +58,6 @@ def get_sentry():
         return None
 
 
-sentry = get_sentry()
+if not TESTING:
+    logger = create_logger()
+    sentry = get_sentry()
