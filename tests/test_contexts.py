@@ -4,18 +4,18 @@ from nukecontexts import ctx
 
 def test_enabled(node):
     node['disable'].setValue(True)
-    assert node['disable'].value() == True
+    assert node['disable'].value()
     with ctx.enabled(node):
-        assert node['disable'].value() == False
-    assert node['disable'].value() == True
+        assert not node['disable'].value()
+    assert node['disable'].value()
     node['disable'].setValue(False)
 
 
 def test_disabled(node):
-    assert node['disable'].value() == False
+    assert not node['disable'].value()
     with ctx.disabled(node):
-        assert node['disable'].value() == True
-    assert node['disable'].value() == False
+        assert node['disable'].value()
+    assert not node['disable'].value()
 
 
 def test_set_attr_errors(node):
@@ -64,3 +64,11 @@ def test_progress(node):
     with ctx1, ctx.Progress(iterable) as progress:
         for idx, item in enumerate(progress):
             assert item == idx + 1
+
+
+def test_inventory(nuke):
+    with ctx.inventory('new_nodes'):
+        for i in range(3):
+            nuke.createNode('Write', inpanel=False)
+    assert len(new_nodes) == 3
+    assert any([node for node in new_nodes if node.Class() == 'Write'])

@@ -50,6 +50,26 @@ class Progress(object):
 
 
 @contextmanager
+def inventory(var):
+    """
+    Given a variable name, create a node inventory on entry and a separate node
+    inventory on exit and save any new nodes into the newly created variable.
+
+    Beware that the new variable is created in ``__builtins__`` and is therefore accessible even after the context manager has exited.
+
+    **Use with namespace in mind!**
+
+    :param var: Variable name
+    :type var: str
+    """
+    import nuke
+    before = nuke.allNodes()
+    yield
+    after = nuke.allNodes()
+    __builtins__[var] = [node for node in after if node not in before]
+
+
+@contextmanager
 def enabled(nodes, log=logger):
     """
     Given a list of nodes (:class:`~nuke.Node`), enable on entry and restore
