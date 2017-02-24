@@ -22,7 +22,7 @@ except:
     if not match:
         raise RuntimeError('Import nukecontexts from within Nuke')
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 __all__ = ['ctx']
 
 
