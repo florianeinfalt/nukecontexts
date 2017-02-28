@@ -3,8 +3,9 @@ from contextlib import contextmanager
 
 from tqdm import tqdm
 
-from nukecontexts import logger
-from nukecontexts import sentry
+from nukecontexts import import_nuke, logger, sentry
+
+nuke = import_nuke()
 
 
 class NukeContextError(ValueError):
