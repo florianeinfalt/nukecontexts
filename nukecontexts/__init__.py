@@ -21,6 +21,7 @@ except:
     match = re.search(application, sys.executable)
     if not match:
         raise RuntimeError('Import nukecontexts from within Nuke')
+    import nuke
 
 __version__ = '0.1.4'
 __all__ = ['ctx']
@@ -41,7 +42,6 @@ def create_logger():
 
 
 def get_sentry():
-    import nuke
     try:
         from raven import Client
         try:
