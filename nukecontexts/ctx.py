@@ -3,7 +3,7 @@ from contextlib import contextmanager
 
 from tqdm import tqdm
 
-from nukecontexts import import_nuke, logger, sentry
+from nukecontexts import import_nuke, logger
 
 nuke = import_nuke()
 
@@ -56,7 +56,8 @@ def inventory(var):
     Given a variable name, create a node inventory on entry and a separate node
     inventory on exit and save any new nodes into the newly created variable.
 
-    Beware that the new variable is created in ``__builtins__`` and is therefore accessible even after the context manager has exited.
+    Beware that the new variable is created in ``__builtins__`` and is
+    therefore accessible even after the context manager has exited.
 
     **Use with namespace in mind!**
 
@@ -81,7 +82,7 @@ def enabled(nodes, log=logger):
     :param log: Logger
     :type log: logging.Logger
     """
-    with set_attr(nodes, 'disable', False, log=log):
+    with AttributeSetter(nodes, 'disable', False, log=log):
         yield
 
 
@@ -96,7 +97,7 @@ def disabled(nodes, log=logger):
     :param log: Logger
     :type log: logging.Logger
     """
-    with set_attr(nodes, 'disable', True, log=log):
+    with AttributeSetter(nodes, 'disable', True, log=log):
         yield
 
 
@@ -115,34 +116,57 @@ def set_attr(nodes, attr, value, log=logger):
     :param log: Logger
     :type log: logging.Logger
     """
-    if not isinstance(nodes, list):
-        nodes = [nodes]
-    enter_values = {}
-    for node in nodes:
-        try:
-            assert node
-        except AssertionError:
-            raise NukeContextError('Invalid node')
-        try:
-            enter_values[node] = node[attr].value()
-        except NameError as err:
-            raise NukeContextError('Node \'{0}\': {1}'.format(node.name(),
-                                                              err.args[0]))
-        logger.info('Entering context: ({0}/{1}/{2})'.format(node.name(),
-                                                             attr,
-                                                             value))
-        try:
-            node[attr].setValue(value)
-        except TypeError as err:
-            raise NukeContextError('Attribute \'{0}\': {1}'.format(attr, err.args[0]))
-    try:
+    with AttributeSetter(nodes, attr, value, log=log):
         yield
-    finally:
-        for node, enter_value in enter_values.iteritems():
-            logger.info('Restoring context: ({0}/{1}/{2})'.format(node.name(),
-                                                                  attr,
-                                                                  enter_value))
-            node[attr].setValue(enter_value)
+
+
+class AttributeSetter(object):
+    def __init__(self, nodes, attr, value, log=logger):
+        """
+        Given a list of nodes (:class:`~nuke.Node`), set a given ``attr`` to
+        ``value`` on entry and restore to original value on exit.
+
+        :param nodes: Nodes
+        :type nodes: list
+        :param attr: Attribute
+        :type attr: str
+        :param value: Value
+        :type value: str, int, float, bool
+        :param log: Logger
+        :type log: logging.Logger
+        """
+        if not isinstance(nodes, list):
+            nodes = [nodes]
+        self.nodes = nodes
+        self.attr = attr
+        self.value = value
+        self.log = log
+
+    def __enter__(self):
+        self.enter_values = {}
+        for node in self.nodes:
+            try:
+                assert node
+            except AssertionError:
+                raise NukeContextError('Invalid node')
+            try:
+                self.enter_values[node] = node[self.attr].value()
+            except NameError as err:
+                raise NukeContextError('Node \'{0}\': {1}'.format(
+                    node.name(), err.args[0]))
+            logger.info('Entering context: ({0}/{1}/{2})'.format(
+                node.name(), self.attr, self.value))
+            try:
+                node[self.attr].setValue(self.value)
+            except TypeError as err:
+                raise NukeContextError('Attribute \'{0}\': {1}'.format(
+                    self.attr, err.args[0]))
+
+    def __exit__(self, *args):
+        for node, enter_value in self.enter_values.iteritems():
+            logger.info('Restoring context: ({0}/{1}/{2})'.format(
+                node.name(), self.attr, enter_value))
+            node[self.attr].setValue(enter_value)
 
 
 @contextmanager
@@ -154,6 +178,10 @@ def multiple_contexts(contexts):
     :param contexts: List of contextmanagers
     :type contexts: list
     """
+    msg = ('nukecontexts.ctx.multiple_contexts() is deprecated. '
+           'Use contextlib.nested()')
+    nuke.warning(msg)
+
     for ctx in contexts:
         ctx.__enter__()
 
