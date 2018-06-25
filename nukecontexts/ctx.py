@@ -46,7 +46,7 @@ class Progress(object):
                     desc=self.name,
                     file=self.output)
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, exc_type, exc_value, traceback):
         pass
 
 
@@ -162,7 +162,7 @@ class AttributeSetter(object):
                 raise NukeContextError('Attribute \'{0}\': {1}'.format(
                     self.attr, err.args[0]))
 
-    def __exit__(self, *args):
+    def __exit__(self, exc_type, exc_value, traceback):
         for node, enter_value in self.enter_values.iteritems():
             logger.info('Restoring context: ({0}/{1}/{2})'.format(
                 node.name(), self.attr, enter_value))
