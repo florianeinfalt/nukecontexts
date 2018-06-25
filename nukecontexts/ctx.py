@@ -154,7 +154,7 @@ class AttributeSetter(object):
             except NameError as err:
                 raise NukeContextError('Node \'{0}\': {1}'.format(
                     node.name(), err.args[0]))
-            logger.info('Entering context: ({0}/{1}/{2})'.format(
+            logger.info('Entering context: ({0}|{1}|{2})'.format(
                 node.name(), self.attr, self.value))
             try:
                 node[self.attr].setValue(self.value)
@@ -164,7 +164,7 @@ class AttributeSetter(object):
 
     def __exit__(self, exc_type, exc_value, traceback):
         for node, enter_value in self.enter_values.iteritems():
-            logger.info('Restoring context: ({0}/{1}/{2})'.format(
+            logger.info('Restoring context: ({0}|{1}|{2})'.format(
                 node.name(), self.attr, enter_value))
             node[self.attr].setValue(enter_value)
 
