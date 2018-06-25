@@ -35,7 +35,7 @@ except:
         raise RuntimeError('Import nukecontexts from within Nuke')
     nuke = import_nuke()
 
-__version__ = '0.1.5'
+__version__ = '0.2.0'
 __all__ = ['ctx']
 
 
