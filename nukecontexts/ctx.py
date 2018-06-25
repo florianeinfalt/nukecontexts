@@ -105,7 +105,7 @@ def disabled(nodes, log=logger):
 def set_attr(nodes, attr, value, log=logger):
     """
     Given a list of nodes (:class:`~nuke.Node`), set a given ``attr`` to
-    ``value`` entry and restore to original value on exit.
+    ``value`` on entry and restore to original value on exit.
 
     :param nodes: Nodes
     :type nodes: list
@@ -175,11 +175,13 @@ def multiple_contexts(contexts):
     Given a list of contextmanagers, sequentially enter all contextmanagers,
     raise :class:`Exception` in case errors occur in contexts.
 
+    **Deprecated**. Use :func:`contextlib.nested(*contexts)`.
+
     :param contexts: List of contextmanagers
     :type contexts: list
     """
     msg = ('nukecontexts.ctx.multiple_contexts() is deprecated. '
-           'Use contextlib.nested()')
+           'Use contextlib.nested(*contexts)')
     nuke.warning(msg)
 
     for ctx in contexts:

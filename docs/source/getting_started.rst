@@ -1,13 +1,17 @@
 Getting Started
 ===============
 
-``nukecontexts`` is a library of composable context managers for Nuke to manage the state of complex compositing scripts in code.
+``nukecontexts`` is a library of composable context managers for Nuke to
+manage the state of complex compositing scripts in code.
 
-The most common use case for ``nukecontexts`` is automated rendering of multiple states of a compositing script. For example two different output formats, jpg and png.
+The most common use case for ``nukecontexts`` is automated rendering of
+multiple states of a compositing script. For example two different output
+formats, jpg and png.
 
 .. code:: python
 
     import nuke
+    import contextlib
     from nukecontexts import ctx
 
     render_node = nuke.toNode('Write1')
@@ -16,7 +20,10 @@ The most common use case for ``nukecontexts`` is automated rendering of multiple
     with ctx.set_attr(render_node, 'file_type', 'png'):
         nuke.execute(render_node.name(), 1, 1, 1)
 
-The power of ``nukecontexts`` comes with composable contexts, using ``multiple_contexts()``. Arbitrarily complex, varying states of the compositing script can be defined and used to automatically generate different results.
+The power of ``nukecontexts`` comes with composable contexts, using
+``contextlib.nested()``. Arbitrarily complex, varying states of the
+compositing script can be defined and used to automatically generate
+different results.
 
 .. code:: python
 
@@ -29,13 +36,13 @@ The power of ``nukecontexts`` comes with composable contexts, using ``multiple_c
     ctx3 = ctx.set_attr(switch_node, 'which', 0)
     ctx4 = ctx.disable(merge_node)
 
-    with ctx.multiple_contexts([ctx1, ctx2, ctx3]):
+    with contextlib.nested(ctx1, ctx2, ctx3):
         """Render with the merge_node and grade_node enabled, the
         grade_node's white attribute set to 2.0 and the switch_node's switch
         position set to 0."""
         nuke.execute(render_node.name(), 1, 1, 1)
 
-    with ctx.multiple_contexts([ctx3, ctx4]):
+    with contextlib.nested(ctx3, ctx4):
         """Render with the switch_node's switch position set to 0 and the
         merge node disabled; the grade_node's gain value remains at the
         original value."""
