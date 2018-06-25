@@ -2,13 +2,13 @@ nukecontexts
 ============
 
 .. image:: https://img.shields.io/pypi/l/nukecontexts.svg
-    :target: https://pypi.python.org/pypi/nukecontexts
+    :target: https://pypi.org/project/nukecontexts/
 .. image:: https://img.shields.io/pypi/pyversions/nukecontexts.svg
-    :target: https://pypi.python.org/pypi/nukecontexts
+    :target: https://pypi.org/project/nukecontexts/
 .. image:: https://img.shields.io/pypi/v/nukecontexts.svg
-    :target: https://pypi.python.org/pypi/nukecontexts
+    :target: https://pypi.org/project/nukecontexts/
 .. image:: https://img.shields.io/pypi/wheel/nukecontexts.svg
-    :target: https://pypi.python.org/pypi/nukecontexts
+    :target: https://pypi.org/project/nukecontexts/
 .. image:: https://readthedocs.org/projects/nukecontexts/badge/?version=latest
     :target: https://readthedocs.org/projects/nukecontexts/?badge=latest
 
